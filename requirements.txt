@@ -1,4 +1,4 @@
 pymongo
 telethon
-dotenv
+python-dotenv
 dnspython
