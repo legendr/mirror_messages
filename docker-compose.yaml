@@ -1,0 +1,12 @@
+version: '3.1'
+
+services:
+  mirror:
+    container_name: mirror_container
+    build:
+      context: .
+    command: python mirror.py
+    restart: always
+    env_file:
+      - ".env"
+ 
