@@ -14,7 +14,7 @@ env.read_env()
 API_ID = env.int('API_ID')
 API_HASH = env.str('API_HASH')
 SESSION_STRING = env.str('SESSION_STRING')
-DATABASE_URL = env.url('DATABASE_URL')
+DATABASE_URL = env.str('DATABASE_URL')
 
 MY_CHANNEL=env.int('MY_CHANNEL')
 SOURCE_CHANNELS =["faceofwar", "anna_news", "rybar", "sashakots", "epoddubny",
@@ -44,9 +44,7 @@ async def handler_new_message(event):
 
         # отправим сообщение в наш канал
         #await client.send_message(TARGET_CHANNEL, event.message)
-        # либо вместо переотправки можно репостнуть:
-        #await client.forward_messages(-1001507003446, event.message)
-        #print(event.message.to_dict()['fwd_from']['from_id']['channel_id']) 
+ 
     except Exception as e:
         print(e)
 
