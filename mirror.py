@@ -5,19 +5,18 @@ from telethon.sync import TelegramClient
 from pymongo import MongoClient
 import datetime
 
-# file: .env
-from os import environ
-from dotenv import load_dotenv
+# file: .
+from environs import Env
+# Теперь используем вместо библиотеки python-dotenv библиотеку environs
+env = Env()
+env.read_env()
 
-# Загрузка значений переменных окружения
-load_dotenv()
+API_ID = env.int('API_ID')
+API_HASH = env.str('API_HASH')
+SESSION_STRING = env.str('SESSION_STRING')
+DATABASE_URL = env.url('DATABASE_URL')
 
-API_ID = environ.get('API_ID')
-API_HASH = environ.get('API_HASH')
-SESSION_STRING = environ.get('SESSION_STRING')
-DATABASE_URL = environ.get('DATABASE_URL')
-
-MY_CHANNEL=environ.get('MY_CHANNEL')
+MY_CHANNEL=env.int('MY_CHANNEL')
 SOURCE_CHANNELS =["faceofwar", "anna_news", "rybar", "sashakots", "epoddubny",
                  "russ_orientalist", "vladlentatarsky", "aleksandr_skif", "neoficialniybezsonov", "SIL0VIKI",
                  "boris_rozhin", "voenacher", "grey_zone", "chvkmedia", "Ugolok_Sitha"]
