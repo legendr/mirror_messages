@@ -25,11 +25,16 @@ client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
 @client.on(events.NewMessage(chats=SOURCE_CHANNELS))
 async def handler_new_message(event):
     try:
-        channel_id=event.message.to_dict()['fwd_from']['from_id']['channel_id']
-        post_id=event.message.to_dict()['fwd_from']['channel_post']
+        if event.message.to_dict()['fwd_from'] == None:
+            channel_id=event.message.to_dict()['peer_id']['channel_id']
+            post_id=event.message.to_dict()['id']
+        else:
+            channel_id=event.message.to_dict()['fwd_from']['from_id']['channel_id']
+            post_id=event.message.to_dict()['fwd_from']['channel_post']
         if r.exists('channel') == 0:
             r.hsetnx('channel', channel_id, post_id)
-            r.expire('channel',84600)
+            r.expire('channel',600)
+            await client.forward_messages(MY_CHANNEL, event.message)
         else:
             if r.hsetnx('channel', channel_id, post_id) == 1:
                 await client.forward_messages(MY_CHANNEL, event.message)
