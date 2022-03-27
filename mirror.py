@@ -3,6 +3,7 @@ from datetime import datetime
 from telethon import events
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
+from pymongo import MongoClient
 import redis
 from environs import Env
 
@@ -14,13 +15,18 @@ API_HASH = env.str('API_HASH')
 SESSION_STRING = env.str('SESSION_STRING')
 SOURCE_CHANNELS = env.list('SOURCE_CHANNELS')
 MY_CHANNEL=env.int('MY_CHANNEL')
+DATABASE_URL='mongodb://mongo:27017'
 
+client_mndb = MongoClient(DATABASE_URL)
+db = client_mndb.db_telegram
 r = redis.Redis(host='redis', port=6379)
 client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
+
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNELS))
 async def handler_new_message(event):
     try:
+        db.posts.insert_one({'post': event.message.to_dict()})
         if event.message.to_dict()['fwd_from'] == None:
             channel_id=event.message.to_dict()['peer_id']['channel_id']
             post_id=event.message.to_dict()['id']
